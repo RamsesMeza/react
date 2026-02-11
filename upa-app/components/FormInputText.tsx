@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import { Text, TextInput, View } from "react-native";
 
@@ -7,6 +7,7 @@ type Props<T extends FieldValues> = {
   name: Path<T>;
   placeholder?: string;
   secureTextEntry?: boolean;
+  icon?: ReactElement;
 };
 
 export function FormTextInput<T extends FieldValues>({
@@ -14,6 +15,7 @@ export function FormTextInput<T extends FieldValues>({
   name,
   placeholder,
   secureTextEntry,
+  icon,
 }: Props<T>) {
   return (
     <Controller
@@ -24,20 +26,33 @@ export function FormTextInput<T extends FieldValues>({
         fieldState: { error },
       }) => (
         <View style={{ marginBottom: 14 }}>
-          <TextInput
-            value={(value ?? "") as string}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            placeholder={placeholder}
-            secureTextEntry={secureTextEntry}
-            autoCapitalize="none"
+          {/* CONTENEDOR INPUT + ICONO */}
+          <View
             style={{
+              flexDirection: "row",
+              alignItems: "center",
               borderWidth: 1,
               borderColor: error ? "crimson" : "#ccc",
-              padding: 12,
               borderRadius: 10,
+              paddingHorizontal: 12,
             }}
-          />
+          >
+            {icon ? <View style={{ marginRight: 8 }}>{icon}</View> : null}
+
+            <TextInput
+              value={(value ?? "") as string}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              placeholder={placeholder}
+              secureTextEntry={secureTextEntry}
+              autoCapitalize="none"
+              style={{
+                flex: 1,
+                paddingVertical: 12,
+              }}
+            />
+          </View>
+
           {error?.message ? (
             <Text style={{ marginTop: 6, color: "crimson" }}>
               {error.message}
